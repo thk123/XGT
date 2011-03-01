@@ -56,8 +56,8 @@ namespace XGT.Animation
                 if (value < mTotalAnimationStances)
                 {
                     AnimationStanceChanged(this, new AnimationStanceChangedEventArgs(mCurrentAnimationStance, value));
-                    mCurrentFrameRect.Y = mCurrentAnimationStance * mFrameSize.Height;
                     mCurrentAnimationStance = value;
+                    mCurrentFrameRect.Y = mCurrentAnimationStance * mFrameSize.Height;
                 }
                 else
                 {
