@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAnimationClass", "TestAnimationClass\TestAnimationClass\TestAnimationClass.csproj", "{E990037E-2F04-4558-AC67-F94B589A2BE6}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "TestAnimationClassContent", "TestAnimationClass\TestAnimationClassContent\TestAnimationClassContent.contentproj", "{C08B771A-1750-4B27-87FE-EB40BD6572DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E990037E-2F04-4558-AC67-F94B589A2BE6}.Debug|x86.ActiveCfg = Debug|x86
+		{E990037E-2F04-4558-AC67-F94B589A2BE6}.Debug|x86.Build.0 = Debug|x86
+		{E990037E-2F04-4558-AC67-F94B589A2BE6}.Release|x86.ActiveCfg = Release|x86
+		{E990037E-2F04-4558-AC67-F94B589A2BE6}.Release|x86.Build.0 = Release|x86
+		{C08B771A-1750-4B27-87FE-EB40BD6572DD}.Debug|x86.ActiveCfg = Debug|x86
+		{C08B771A-1750-4B27-87FE-EB40BD6572DD}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
