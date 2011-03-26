@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace XGT.PCInput
 {
-    class KeyPressedEventArgs : EventArgs
+    public class KeyPressedEventArgs : EventArgs
     {
         public Keys KeyPressed;
 

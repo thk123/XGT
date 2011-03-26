@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XGT.Animation;
+using XGT.PCInput;
 
 namespace TestAnimationClass
 {
@@ -37,8 +38,20 @@ namespace TestAnimationClass
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            KeyboardManager.Init();
+            KeyboardManager.KeyPressed += new EventHandler(KeyboardManager_KeyPressed);
+            KeyboardManager.KKeyPressed += new EventHandler(KeyboardManager_KKeyPressed);
             base.Initialize();
+        }
+
+        void KeyboardManager_KKeyPressed(object sender, EventArgs e)
+        {
+            Console.WriteLine("K key pressed whooo");
+        }
+
+        void KeyboardManager_KeyPressed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Key " + ((KeyPressedEventArgs)e).KeyPressed.ToString() + " pressed");
         }
 
         /// <summary>
@@ -72,6 +85,7 @@ namespace TestAnimationClass
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardManager.Update(gameTime);
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();

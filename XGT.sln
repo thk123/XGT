@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animation", "Animation\Animation.csproj", "{EAEBB5DD-5DEE-4675-8E60-26633C16BD3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlFileDesigner", "XmlFileDesigner\XmlFileDesigner.csproj", "{12A5DB0E-B843-4E5C-9257-11B40EE69B95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAnimationClass", "TestAnimationClass\TestAnimationClass\TestAnimationClass\TestAnimationClass.csproj", "{E990037E-2F04-4558-AC67-F94B589A2BE6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A937B41C-551E-446B-A89B-3892755808ED} = {A937B41C-551E-446B-A89B-3892755808ED}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAnimationClassContent", "TestAnimationClass\TestAnimationClass\TestAnimationClassContent\TestAnimationClassContent.contentproj", "{C08B771A-1750-4B27-87FE-EB40BD6572DD}"
 EndProject

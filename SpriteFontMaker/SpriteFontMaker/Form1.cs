@@ -104,7 +104,7 @@ namespace SpriteFontMaker
 
         private void createCSharpCode()
         {
-            this.Controls.Remove(codeOutput);
+            //this.Controls.Remove(codeOutput);
             List<String> lines = new List<string>();
             lines.Add("#region Fonts");
             foreach(SpriteFont font in fontBoxes)
@@ -129,11 +129,33 @@ namespace SpriteFontMaker
                 codeOutput.Text += line;
                 codeOutput.Text += Environment.NewLine;
             }
-            codeOutput.Width = 400;
-            codeOutput.Height = 200;
-            codeOutput.Location = new Point(85, 150 + 50 * verticalPosition);
-            codeOutput.Click += new EventHandler(codeOutput_Click);
-            this.Controls.Add(codeOutput);
+            //codeOutput.Width = 400;
+            //codeOutput.Height = 200;
+            //codeOutput.Location = new Point(85, 150 + 50 * verticalPosition);
+            //codeOutput.Click += new EventHandler(codeOutput_Click);
+            //this.Controls.Add(codeOutput);
+            lines = new List<string>();
+            /*for (int i = (int)Keys.A; i <= (int)Keys.Zoom; i++)
+            {
+                string line = "public static event EventHandler " + ((Keys)i).ToString() + "KeyPressed = delegate { };";
+                lines.Add(line);
+            }*/
+            for (int i = (int)Keys.A; i <= (int)Keys.Zoom; i++)
+            {
+                /*
+                 *case "A":
+                    AKeyPressed(null, new KeyPressedEventArgs(keyPressed));
+                    break; 
+                 */
+                lines.Add("case \""+((Keys)i).ToString()+"\":");
+                lines.Add(((Keys)i).ToString() + "KeyPressed(null, new KeyPressedEventArgs(keyPressed));");
+                lines.Add("break;");
+                lines.Add("");
+            }
+
+            CodeDialog showCode = new CodeDialog();
+            showCode.loadCode(lines);
+            showCode.Show();
         }
 
         void codeOutput_Click(object sender, EventArgs e)
