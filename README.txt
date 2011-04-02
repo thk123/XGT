@@ -10,3 +10,26 @@ Namespace summary:
 -Input -- Manange keyboard (and mouse) interaction specifically allowing users to hook up key press events to actual events
 -Collision -- Provide a collision manager for 2D objects
 -GameSreen -- Provide a set of classes to manage games with multiple (potentially nested) screens
+-LevelDesigner -- A robust xml level editor. Allows you to position textures, define properties for them and export as an xml
+
+Features:
+-Working animation class that allows for rapid deployment of animated sprites with multiple stances
+-Event based Keyboard, Mouse and Button managers
+-Keys and mouse clicks can fire events after specified time
+-Buttons support hover, pressed and released events,
+
+Todo:
+-Input
+         -Mouse - double click events with specifiable time delay
+         -Access to see how long button been pressed
+         -Buttons - right & middle click functionality
+         -ButtonManager get what button is being pressed or hovered
+         -Keyboard - modify events to provide information on how long that key has been pressed
+-Collision
+         -Yet to implement
+-GameScreen
+         -Yet to implement
+-SpriteFontMaker
+          -General UI improvements
+-XmlFileDesigner
+          -Yet to implement
