@@ -144,7 +144,7 @@ namespace XGT.PCInput
         {
             mCurrentMouseState = Mouse.GetState();
             mPreviousMouseState = Mouse.GetState();
-            mMouseDuration = new int[(int)MouseButtons.rightButton];
+            mMouseDuration = new int[(int)MouseButtons.RightButton+1];
         }
 
         /// <summary>
@@ -162,12 +162,12 @@ namespace XGT.PCInput
 
             if (mCurrentMouseState.LeftButton == ButtonState.Pressed)
             {
-                mMouseDuration[(int)MouseButtons.leftButton] += gameTime.ElapsedGameTime.Milliseconds;
+                mMouseDuration[(int)MouseButtons.LeftButton] += gameTime.ElapsedGameTime.Milliseconds;
                 if (mPreviousMouseState.LeftButton == ButtonState.Released)
                 {
                     LeftMousePress(null, new EventArgs());
                 }
-                if (mMouseDuration[(int)MouseButtons.leftButton] > mPressLength)
+                if (mMouseDuration[(int)MouseButtons.LeftButton] > mPressLength)
                 {
                     LeftMouseHeld(null, new EventArgs());
                 }
@@ -175,17 +175,17 @@ namespace XGT.PCInput
             else if (mPreviousMouseState.LeftButton == ButtonState.Released)
             {
                 LeftMouseRelease(null, new EventArgs());
-                mMouseDuration[(int)MouseButtons.leftButton] = 0;
+                mMouseDuration[(int)MouseButtons.LeftButton] = 0;
             }
 
             if (mCurrentMouseState.MiddleButton == ButtonState.Pressed)
             {
-                mMouseDuration[(int)MouseButtons.middleButton] += gameTime.ElapsedGameTime.Milliseconds;
+                mMouseDuration[(int)MouseButtons.MiddleButton] += gameTime.ElapsedGameTime.Milliseconds;
                 if (mPreviousMouseState.MiddleButton == ButtonState.Released)
                 {
                     MiddleMousePress(null, new EventArgs());
                 }
-                if (mMouseDuration[(int)MouseButtons.middleButton] > mPressLength)
+                if (mMouseDuration[(int)MouseButtons.MiddleButton] > mPressLength)
                 {
                     MiddleMouseHeld(null, new EventArgs());
                 }
@@ -193,17 +193,17 @@ namespace XGT.PCInput
             else if (mPreviousMouseState.MiddleButton == ButtonState.Released)
             {
                 MiddleMouseRelease(null, new EventArgs());
-                mMouseDuration[(int)MouseButtons.leftButton] = 0;
+                mMouseDuration[(int)MouseButtons.LeftButton] = 0;
             }
 
             if (mCurrentMouseState.RightButton == ButtonState.Pressed)
             {
-                mMouseDuration[(int)MouseButtons.rightButton] += gameTime.ElapsedGameTime.Milliseconds;
+                mMouseDuration[(int)MouseButtons.RightButton] += gameTime.ElapsedGameTime.Milliseconds;
                 if (mPreviousMouseState.RightButton == ButtonState.Released)
                 {
                     RightMousePress(null, new EventArgs());
                 }
-                if (mMouseDuration[(int)MouseButtons.rightButton] > mPressLength)
+                if (mMouseDuration[(int)MouseButtons.RightButton] > mPressLength)
                 {
                     RightMouseHeld(null, new EventArgs());
                 }
@@ -211,7 +211,7 @@ namespace XGT.PCInput
             else if (mPreviousMouseState.RightButton == ButtonState.Released)
             {
                 RightMouseRelease(null, new EventArgs());
-                mMouseDuration[(int)MouseButtons.rightButton] = 0;
+                mMouseDuration[(int)MouseButtons.RightButton] = 0;
             }
 
             if (Math.Abs(mCurrentMouseState.ScrollWheelValue - mPreviousMouseState.ScrollWheelValue) >= mScrollThreshhold)
@@ -227,8 +227,8 @@ namespace XGT.PCInput
     /// </summary>
     public enum MouseButtons
     {
-        leftButton = 0,
-        middleButton,
-        rightButton,
+        LeftButton = 0,
+        MiddleButton,
+        RightButton,
     };
 }

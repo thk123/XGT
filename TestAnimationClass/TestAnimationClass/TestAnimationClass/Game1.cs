@@ -22,11 +22,13 @@ namespace TestAnimationClass
         SpriteBatch spriteBatch;
         Texture2D baseTexture;
         AnimatedSprite mySprite;
+        ButtonManager mainWindowButtonManager;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.IsMouseVisible = true;
         }
 
         /// <summary>
@@ -39,19 +41,22 @@ namespace TestAnimationClass
         {
             // TODO: Add your initialization logic here
             KeyboardManager.Init();
-            KeyboardManager.KeyPressed += new EventHandler(KeyboardManager_KeyPressed);
-            KeyboardManager.KKeyPressed += new EventHandler(KeyboardManager_KKeyPressed);
+            MouseManager.Init();
+            mainWindowButtonManager = new ButtonManager();
+
+            KeyboardManager.EscapeKeyPressed += new EventHandler(KeyboardManager_EscapeKeyPressed);
+            KeyboardManager.AKeyPressed += new EventHandler(KeyboardManager_AKeyPressed);
             base.Initialize();
         }
 
-        void KeyboardManager_KKeyPressed(object sender, EventArgs e)
+        void KeyboardManager_AKeyPressed(object sender, EventArgs e)
         {
-            Console.WriteLine("K key pressed whooo");
+            Console.WriteLine("Hello");
         }
 
-        void KeyboardManager_KeyPressed(object sender, EventArgs e)
+        void KeyboardManager_EscapeKeyPressed(object sender, EventArgs e)
         {
-            Console.WriteLine("Key " + ((KeyPressedEventArgs)e).KeyPressed.ToString() + " pressed");
+            this.Exit();
         }
 
         /// <summary>
@@ -65,8 +70,17 @@ namespace TestAnimationClass
             baseTexture = Content.Load<Texture2D>("BaseTexture");
             mySprite = new AnimatedSprite(baseTexture, 4, new Rectangle(0, 0, 100, 100));
             mySprite.GlobalPosition = new Vector2(50f, 50f);
+            PCButton myBtn = new PCButton(baseTexture, new Rectangle(10, 10, 100, 100));
+            myBtn.MouseHover += new EventHandler(myBtn_MouseHover);
+            myBtn.configureButton(PCButtonState.hover, new Point(100, 0));
+            mainWindowButtonManager.AddButton(myBtn);
 
             // TODO: use this.Content to load your game content here
+        }
+
+        void myBtn_MouseHover(object sender, EventArgs e)
+        {
+            Console.WriteLine("Mouse hover");
         }
 
         /// <summary>
@@ -86,6 +100,7 @@ namespace TestAnimationClass
         protected override void Update(GameTime gameTime)
         {
             KeyboardManager.Update(gameTime);
+            MouseManager.Update(gameTime);
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -105,6 +120,7 @@ namespace TestAnimationClass
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             mySprite.Draw(gameTime, spriteBatch);
+            mainWindowButtonManager.Draw(spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
 

@@ -97,6 +97,7 @@
     <Compile Include="KeyPressedEventArgs.cs" />
     <Compile Include="MouseManager.cs" />
     <Compile Include="PCButton.cs" />
+    <Compile Include="PCButtonGroup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

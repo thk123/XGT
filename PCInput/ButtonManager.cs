@@ -7,27 +7,156 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XGT.PCInput
 {
-    public static class ButtonManager
+    public class ButtonManager
     {
-        private static List<PCButton> mButtons;
+        private List<PCButtonGroup> mButtons;
+        private PCButton mUnderMouseButton;
+        private Rectangle mExclusionRectangle;
 
-        public static void AddButton(PCButton button)
+        /// <summary>
+        /// To specify a rectangle not to check for button collsisions (ie, if your UI is not in the middle)
+        /// </summary>
+        public Rectangle ExclusionRectangle
         {
-            mButtons.Add(button);
-        }
-
-        public static void Update()
-        {
-            Point mousePosition = MouseManager.MousePosition;
-            foreach (PCButton button in mButtons)
+            get
             {
-
+                return mExclusionRectangle;
+            }
+            set
+            {
+                mExclusionRectangle = value;
             }
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        /// <summary>
+        /// Initalise the button manager
+        /// </summary>
+        public ButtonManager()
         {
+            mUnderMouseButton = null;
+            MouseManager.MouseMove += new EventHandler(MouseManager_MouseMove);
+            MouseManager.LeftMousePress += new EventHandler(MouseManager_LeftMousePress);
+            MouseManager.LeftMouseRelease += new EventHandler(MouseManager_LeftMouseRelease);
+            mButtons = new List<PCButtonGroup>();
+            mButtons.Add(new PCButtonGroup()); //this is the default button group to check, always mButtons[0]
+            mExclusionRectangle = new Rectangle();
+        }
 
+        /// <summary>
+        /// Add the PCButton to the standard group
+        /// </summary>
+        /// <param name="button">The new PCButton, make sure you have already registered to any desired events</param>
+        public void AddButton(PCButton button)
+        {
+            mButtons[0].addButton(button); //add the button to the standard group
+        }
+        /// <summary>
+        /// Add a set of buttons to the manager
+        /// </summary>
+        /// <param name="buttonGroup">A group of buttons (in close proximity)</param>
+        /// <returns>The index of the group in this manager</returns>
+        public int AddButtonGroup(PCButtonGroup buttonGroup)
+        {
+            mButtons.Add(buttonGroup);
+            return mButtons.Count - 1;
+        }
+
+        /// <summary>
+        /// Add a set of buttons to the manager in a new button group
+        /// </summary>
+        /// <param name="buttons">The buttons to add (in close proximity)</param>
+        /// <returns></returns>The index of the group in this manager</returns>
+        public int AddButtonGroup(params PCButton[] buttons)
+        {
+            PCButtonGroup buttonGroup = new PCButtonGroup(buttons);
+            mButtons.Add(buttonGroup);
+            return mButtons.Count - 1;
+        }
+
+        /// <summary>
+        /// Draw all the buttons currently registerd with this button manager
+        /// </summary>
+        /// <param name="spriteBatch">The sprite batch to draw the buttons with</param>
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach(PCButtonGroup buttonGroup in mButtons)
+            {
+                buttonGroup.Draw(spriteBatch);
+            }
+        }
+
+        /// <summary>
+        /// Draw buttons from a selected button group
+        /// </summary>
+        /// <param name="spriteBatch">The sprite batch to draw the buttons with</param>
+        /// <param name="drawGroup">The group to draw, eg the menu bar</param>
+        public void Draw(SpriteBatch spriteBatch, PCButtonGroup drawGroup)
+        {
+            drawGroup.Draw(spriteBatch);
+        }
+
+        /// <summary>
+        /// Draw buttons for a selected button group
+        /// </summary>
+        /// <param name="spriteBatch">The sprite batch to draw the buttons with</param>
+        /// <param name="drawGroupId">The index of the group to draw, eg the menu bar</param>
+        /// <exception cref="IndexInvalidException">If the number is not a valid index</exception>
+        public void Draw(SpriteBatch spriteBatch, int drawGroupId)
+        {
+            if (drawGroupId < mButtons.Count)
+            {
+                mButtons[drawGroupId].Draw(spriteBatch);
+            }
+            else
+            {
+                throw new Exception("Draw group out of bounds");
+            }
+        }
+
+        private void MouseManager_MouseMove(object sender, EventArgs e)
+        {
+            Point mousePosition = MouseManager.MousePosition;
+            if (mExclusionRectangle.Contains(mousePosition))
+            {
+                return;
+            }
+            if (mUnderMouseButton != null && mUnderMouseButton.checkForCollision(mousePosition))
+            {
+                return;
+            }
+            else
+            {
+                if (mUnderMouseButton != null)
+                {
+                    mUnderMouseButton.MouseUnHovered();
+                }
+                mUnderMouseButton = null;
+                foreach (PCButtonGroup buttonGroup in mButtons)
+                {
+                    mUnderMouseButton = buttonGroup.checkForCollision(mousePosition);
+                    if (mUnderMouseButton != null)
+                    {
+                        mUnderMouseButton.MouseHovered();
+                    }
+
+                }
+            }
+        }
+
+        private void MouseManager_LeftMouseRelease(object sender, EventArgs e)
+        {
+            if (mUnderMouseButton != null && mUnderMouseButton.ButtonState == PCButtonState.pressed)
+            {
+                mUnderMouseButton.MouseReleased();
+            }
+        }
+
+        private void MouseManager_LeftMousePress(object sender, EventArgs e)
+        {
+            if (mUnderMouseButton != null)
+            {
+                mUnderMouseButton.MousePressed();
+            }
         }
     }
 }

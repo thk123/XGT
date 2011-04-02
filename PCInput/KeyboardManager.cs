@@ -15,8 +15,10 @@ namespace XGT.PCInput
     {
         private static KeyboardState mCurrentKeyboardState, mPreviousKeyboardState;
         private static int[] keyDuration;
-        
 
+        /// <summary>
+        /// The current state of the keyboard as of the last time the update method was caled
+        /// </summary>
         public static KeyboardState CurrentKeyboardState
         {
             get
@@ -24,6 +26,10 @@ namespace XGT.PCInput
                 return mCurrentKeyboardState;
             }
         }
+
+        /// <summary>
+        /// The state of the keyboard from the time before the last update call
+        /// </summary>
         public static KeyboardState PreviousKeyboardState
         {
             get
@@ -31,9 +37,10 @@ namespace XGT.PCInput
                 return mPreviousKeyboardState;
             }
         }
-        
 
-        //public static event EventHandler KeyPressedEvent;
+        /// <summary>
+        /// Occurs when any key on the keyboard is pressed
+        /// </summary>
         public static event EventHandler KeyPressed = delegate{};
 
         #region Individual Key Events
@@ -617,14 +624,21 @@ namespace XGT.PCInput
 
         #endregion
 
+        /// <summary>
+        /// Initalse the KeyboardManager - must be called before the update function
+        /// </summary>
         public static void Init()
         {
             mCurrentKeyboardState = Keyboard.GetState();
             mPreviousKeyboardState = Keyboard.GetState();
            
-            keyDuration = new int[(int)Keys.Zoom];
+            keyDuration = new int[(int)Keys.Zoom+1];
         }
 
+        /// <summary>
+        /// Update the Keyboard set and fires any events
+        /// </summary>
+        /// <param name="gameTime">A reference to the current gameTime instance, used for maintaining how long keys have been pressed for</param>
         public static void Update(GameTime gameTime)
         {
             mPreviousKeyboardState = mCurrentKeyboardState;
@@ -646,6 +660,5 @@ namespace XGT.PCInput
                 }
             }
         }
-
     }
 }

@@ -128,8 +128,9 @@
       <Name>PCInput</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestAnimationClassContent\TestAnimationClassContent.contentproj">
-      <Name>TestAnimationClassContent</Name>
+      <Name>TestAnimationClassContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{C08B771A-1750-4B27-87FE-EB40BD6572DD}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

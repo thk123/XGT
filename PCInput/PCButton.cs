@@ -15,33 +15,67 @@ namespace XGT.PCInput
         private Point[] mStartPoints;
         private PCButtonState mButtonState;
 
-        public PCButton(Texture2D lButtonSprite, Rectangle lDrawRectange, Rectangle lLocation)
+        public Rectangle Location
+        {
+            get
+            {
+                return mLocation;
+            }
+        }
+
+        public PCButtonState ButtonState
+        {
+            get
+            {
+                return mButtonState;
+            }
+        }
+
+        public PCButton(Texture2D lButtonSprite, Rectangle lLocation)
         {
             mButtonSprite = lButtonSprite;
-            mDrawRectange = lDrawRectange;
+            mDrawRectange = new Rectangle(0, 0, lLocation.Width, lLocation.Height);
             mLocation = lLocation;
 
             mStartPoints = new Point[4];
             mButtonState = PCButtonState.none;
         }
 
-        public void MouseHovered()
+        public virtual void MouseHovered()
         {
-            mDrawRectange.X += mStartPoints[(int)PCButtonState.hover].X;
+            mButtonState = PCButtonState.hover;
 
-            mouseHover(this, new EventArgs());
-        }
-        public void MouseUnHover()
-        {
+            mDrawRectange.X = mStartPoints[(int)PCButtonState.hover].X;
+            mDrawRectange.Y = mStartPoints[(int)PCButtonState.hover].Y;
 
+            MouseHover(this, new EventArgs());
         }
-        public void MousePressed()
+        public virtual void MouseUnHovered()
         {
-            
-        }
-        public void MouseReleased()
-        {
+            mButtonState = PCButtonState.none;
 
+            mDrawRectange.X = mStartPoints[(int)PCButtonState.none].X;
+            mDrawRectange.Y = mStartPoints[(int)PCButtonState.none].Y;
+
+            MouseUnHover(this, new EventArgs());
+        }
+        public virtual void MousePressed()
+        {
+            mButtonState = PCButtonState.pressed;
+
+            mDrawRectange.X = mStartPoints[(int)PCButtonState.pressed].X;
+            mDrawRectange.Y = mStartPoints[(int)PCButtonState.pressed].Y;
+
+            MousePress(this, new EventArgs());
+        }
+        public virtual void MouseReleased()
+        {
+            mButtonState = PCButtonState.released;
+
+            mDrawRectange.X = mStartPoints[(int)PCButtonState.released].X;
+            mDrawRectange.Y = mStartPoints[(int)PCButtonState.released].Y;
+
+            MouseRelase(this, new EventArgs());
         }
 
         public void configureButton(PCButtonState lButtonState, Point position)
@@ -54,7 +88,15 @@ namespace XGT.PCInput
             return mLocation.Contains(position);
         }
 
-        public event EventHandler mouseHover = delegate { };
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(mButtonSprite, mLocation, mDrawRectange, Color.White);
+        }
+
+        public event EventHandler MouseHover = delegate { };
+        public event EventHandler MouseUnHover = delegate { };
+        public event EventHandler MousePress = delegate { };
+        public event EventHandler MouseRelase = delegate { };
 
     }
 

@@ -134,25 +134,25 @@ namespace SpriteFontMaker
             //codeOutput.Location = new Point(85, 150 + 50 * verticalPosition);
             //codeOutput.Click += new EventHandler(codeOutput_Click);
             //this.Controls.Add(codeOutput);
-            lines = new List<string>();
+            /*lines = new List<string>();
             /*for (int i = (int)Keys.A; i <= (int)Keys.Zoom; i++)
             {
                 string line = "public static event EventHandler " + ((Keys)i).ToString() + "KeyPressed = delegate { };";
                 lines.Add(line);
-            }*/
+            }
             for (int i = (int)Keys.A; i <= (int)Keys.Zoom; i++)
             {
                 /*
                  *case "A":
                     AKeyPressed(null, new KeyPressedEventArgs(keyPressed));
                     break; 
-                 */
+                 
                 lines.Add("case \""+((Keys)i).ToString()+"\":");
                 lines.Add(((Keys)i).ToString() + "KeyPressed(null, new KeyPressedEventArgs(keyPressed));");
                 lines.Add("break;");
                 lines.Add("");
             }
-
+            */
             CodeDialog showCode = new CodeDialog();
             showCode.loadCode(lines);
             showCode.Show();
