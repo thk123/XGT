@@ -14,9 +14,8 @@ namespace XGT.PCInput
     public static class KeyboardManager
     {
         private static KeyboardState mCurrentKeyboardState, mPreviousKeyboardState;
-        private static MouseState mCurrentMouseState, mPreviousMouseState;
         private static int[] keyDuration;
-        private static int[] mouseDuration;
+        
 
         public static KeyboardState CurrentKeyboardState
         {
@@ -32,20 +31,7 @@ namespace XGT.PCInput
                 return mPreviousKeyboardState;
             }
         }
-        public static MouseState CurrentMouseState
-        {
-            get
-            {
-                return mCurrentMouseState;
-            }
-        }
-        public static MouseState PreviousMouseState
-        {
-            get
-            {
-                return mPreviousMouseState;
-            }
-        }
+        
 
         //public static event EventHandler KeyPressedEvent;
         public static event EventHandler KeyPressed = delegate{};
@@ -77,6 +63,7 @@ namespace XGT.PCInput
         public static event EventHandler XKeyPressed = delegate { };
         public static event EventHandler YKeyPressed = delegate { };
         public static event EventHandler ZKeyPressed = delegate { };
+        public static event EventHandler EscapeKeyPressed = delegate { };
         public static event EventHandler LWinKeyPressed = delegate { };
         public static event EventHandler RWinKeyPressed = delegate { };
         public static event EventHandler AppsKeyPressed = delegate { };
@@ -271,6 +258,10 @@ namespace XGT.PCInput
 
                 case "Z":
                     ZKeyPressed(null, new KeyPressedEventArgs(keyPressed));
+                    break;
+
+                case "Escape":
+                    EscapeKeyPressed(null, new KeyPressedEventArgs(keyPressed));
                     break;
 
                 case "LWin":
@@ -630,11 +621,8 @@ namespace XGT.PCInput
         {
             mCurrentKeyboardState = Keyboard.GetState();
             mPreviousKeyboardState = Keyboard.GetState();
-            mCurrentMouseState = Mouse.GetState();
-            mPreviousMouseState = Mouse.GetState();
-
+           
             keyDuration = new int[(int)Keys.Zoom];
-            mouseDuration = new int[(int)MouseButtons.rightButton];
         }
 
         public static void Update(GameTime gameTime)
@@ -660,11 +648,4 @@ namespace XGT.PCInput
         }
 
     }
-
-    public enum MouseButtons
-    {
-        leftButton = 0,
-        middleButton,
-        rightButton,
-    };
 }
