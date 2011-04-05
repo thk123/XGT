@@ -46,7 +46,20 @@ namespace TestAnimationClass
 
             KeyboardManager.EscapeKeyPressed += new EventHandler(KeyboardManager_EscapeKeyPressed);
             KeyboardManager.AKeyPressed += new EventHandler(KeyboardManager_AKeyPressed);
+
+            MouseManager.LeftMouseDoubleClick += new EventHandler(MouseManager_LeftMouseDoubleClick);
+            MouseManager.ScrollWheelScrolled += new EventHandler(MouseManager_ScrollWheelScrolled);
             base.Initialize();
+        }
+
+        void MouseManager_ScrollWheelScrolled(object sender, EventArgs e)
+        {
+            Console.WriteLine("Scroll whell scrolled");
+        }
+
+        void MouseManager_LeftMouseDoubleClick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Double clicked");
         }
 
         void KeyboardManager_AKeyPressed(object sender, EventArgs e)
@@ -72,10 +85,29 @@ namespace TestAnimationClass
             mySprite.GlobalPosition = new Vector2(50f, 50f);
             PCButton myBtn = new PCButton(baseTexture, new Rectangle(10, 10, 100, 100));
             myBtn.MouseHover += new EventHandler(myBtn_MouseHover);
-            myBtn.configureButton(PCButtonState.hover, new Point(100, 0));
+            myBtn.RightMousePress += new EventHandler(myBtn_RightMousePress);
+            myBtn.HotKey = Keys.G;
+            myBtn.LeftMousePress += new EventHandler(myBtn_LeftMousePress);
+            myBtn.LeftMouseDoubleClick += new EventHandler(myBtn_LeftMouseDoubleClick);
+            myBtn.ConfigureButton(PCButtonState.hover, new Point(100, 0));
             mainWindowButtonManager.AddButton(myBtn);
 
             // TODO: use this.Content to load your game content here
+        }
+
+        void myBtn_LeftMousePress(object sender, EventArgs e)
+        {
+            Console.WriteLine("clciked");
+        }
+
+        void myBtn_LeftMouseDoubleClick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Left mouse double clicked");
+        }
+
+        void myBtn_RightMousePress(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right clicked button");
         }
 
         void myBtn_MouseHover(object sender, EventArgs e)

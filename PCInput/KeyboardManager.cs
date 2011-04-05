@@ -158,7 +158,55 @@ namespace XGT.PCInput
         public static event EventHandler EraseEofKeyPressed = delegate { };
         public static event EventHandler PlayKeyPressed = delegate { };
         public static event EventHandler ZoomKeyPressed = delegate { };
-        
+        #endregion
+
+        /// <summary>
+        /// Initalse the KeyboardManager - must be called before the update function
+        /// </summary>
+        public static void Init()
+        {
+            mCurrentKeyboardState = Keyboard.GetState();
+            mPreviousKeyboardState = Keyboard.GetState();
+           
+            keyDuration = new int[(int)Keys.Zoom+1];
+        }
+
+        /// <summary>
+        /// Update the Keyboard set and fires any events
+        /// </summary>
+        /// <param name="gameTime">A reference to the current gameTime instance, used for maintaining how long keys have been pressed for</param>
+        public static void Update(GameTime gameTime)
+        {
+            mPreviousKeyboardState = mCurrentKeyboardState;
+            mCurrentKeyboardState = Keyboard.GetState();
+            for (int keyId = 0; keyId < (int)Keys.Zoom; keyId++)
+            {
+                if (mCurrentKeyboardState.IsKeyDown((Keys)keyId))
+                {
+                    if (keyDuration[keyId] == 0)
+                    {
+                        KeyPressed(null, new KeyPressedEventArgs((Keys)keyId));
+                        handleKeyPress((Keys)keyId);
+                    }
+                    keyDuration[keyId] += gameTime.ElapsedGameTime.Milliseconds;
+                }
+                else
+                {
+                    keyDuration[keyId] = 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the amount of time a key has been pressed in miliseconds
+        /// </summary>
+        /// <param name="lKey">The key to check</param>
+        /// <returns>The time in miliseconds the key has been pressed for (0 means not pressed)</returns>
+        public static int GetTimePressed(Keys lKey)
+        {
+            return keyDuration[(int)lKey];
+        }
+
         private static void handleKeyPress(Keys keyPressed)
         {
             switch (keyPressed.ToString())
@@ -619,45 +667,6 @@ namespace XGT.PCInput
                     ZoomKeyPressed(null, new KeyPressedEventArgs(keyPressed));
                     break;
 
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Initalse the KeyboardManager - must be called before the update function
-        /// </summary>
-        public static void Init()
-        {
-            mCurrentKeyboardState = Keyboard.GetState();
-            mPreviousKeyboardState = Keyboard.GetState();
-           
-            keyDuration = new int[(int)Keys.Zoom+1];
-        }
-
-        /// <summary>
-        /// Update the Keyboard set and fires any events
-        /// </summary>
-        /// <param name="gameTime">A reference to the current gameTime instance, used for maintaining how long keys have been pressed for</param>
-        public static void Update(GameTime gameTime)
-        {
-            mPreviousKeyboardState = mCurrentKeyboardState;
-            mCurrentKeyboardState = Keyboard.GetState();
-            for (int keyId = 0; keyId < (int)Keys.Zoom; keyId++)
-            {
-                if (mCurrentKeyboardState.IsKeyDown((Keys)keyId))
-                {
-                    if (keyDuration[keyId] == 0)
-                    {
-                        KeyPressed(null, new KeyPressedEventArgs((Keys)keyId));
-                        handleKeyPress((Keys)keyId);
-                    }
-                    keyDuration[keyId] += gameTime.ElapsedGameTime.Milliseconds;
-                }
-                else
-                {
-                    keyDuration[keyId] = 0;
-                }
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Reflection;
 
 namespace XGT.PCInput
 {
@@ -29,17 +30,33 @@ namespace XGT.PCInput
         }
 
         /// <summary>
+        /// The button currently under the mouse (null if the mouse isn't over a button)
+        /// </summary>
+        public PCButton CurrentActiveButton
+        {
+            get
+            {
+                return mUnderMouseButton;
+            }
+        }
+
+        /// <summary>
         /// Initalise the button manager
         /// </summary>
         public ButtonManager()
         {
             mUnderMouseButton = null;
+
             MouseManager.MouseMove += new EventHandler(MouseManager_MouseMove);
             MouseManager.LeftMousePress += new EventHandler(MouseManager_LeftMousePress);
             MouseManager.LeftMouseRelease += new EventHandler(MouseManager_LeftMouseRelease);
+            MouseManager.LeftMouseDoubleClick += new EventHandler(MouseManager_LeftMouseDoubleClick);
+            MouseManager.RightMousePress += new EventHandler(MouseManager_RightMousePress);
+            MouseManager.RightMouseRelease += new EventHandler(MouseManager_RightMouseRelease);
+
             mButtons = new List<PCButtonGroup>();
             mButtons.Add(new PCButtonGroup()); //this is the default button group to check, always mButtons[0]
-            mExclusionRectangle = new Rectangle();
+            mExclusionRectangle = new Rectangle(); //don't exclude anywhere unless told
         }
 
         /// <summary>
@@ -48,8 +65,9 @@ namespace XGT.PCInput
         /// <param name="button">The new PCButton, make sure you have already registered to any desired events</param>
         public void AddButton(PCButton button)
         {
-            mButtons[0].addButton(button); //add the button to the standard group
+            mButtons[0].AddButton(button); //add the button to the standard group
         }
+        
         /// <summary>
         /// Add a set of buttons to the manager
         /// </summary>
@@ -120,7 +138,7 @@ namespace XGT.PCInput
             {
                 return;
             }
-            if (mUnderMouseButton != null && mUnderMouseButton.checkForCollision(mousePosition))
+            if (mUnderMouseButton != null && mUnderMouseButton.CheckForCollision(mousePosition))
             {
                 return;
             }
@@ -133,7 +151,7 @@ namespace XGT.PCInput
                 mUnderMouseButton = null;
                 foreach (PCButtonGroup buttonGroup in mButtons)
                 {
-                    mUnderMouseButton = buttonGroup.checkForCollision(mousePosition);
+                    mUnderMouseButton = buttonGroup.CheckForCollision(mousePosition);
                     if (mUnderMouseButton != null)
                     {
                         mUnderMouseButton.MouseHovered();
@@ -147,7 +165,7 @@ namespace XGT.PCInput
         {
             if (mUnderMouseButton != null && mUnderMouseButton.ButtonState == PCButtonState.pressed)
             {
-                mUnderMouseButton.MouseReleased();
+                mUnderMouseButton.LeftMouseReleased();
             }
         }
 
@@ -155,8 +173,23 @@ namespace XGT.PCInput
         {
             if (mUnderMouseButton != null)
             {
-                mUnderMouseButton.MousePressed();
+                mUnderMouseButton.LeftMousePressed();
             }
         }
+
+        private void MouseManager_LeftMouseDoubleClick(object sender, EventArgs e)
+        {
+            mUnderMouseButton.LeftMouseDoubeClicked();
+        }
+
+        private void MouseManager_RightMouseRelease(object sender, EventArgs e)
+        {
+            mUnderMouseButton.RightMouseReleased();
+        }
+
+        private void MouseManager_RightMousePress(object sender, EventArgs e)
+        {
+            mUnderMouseButton.RightMousePressed();
+        }    
     }
 }

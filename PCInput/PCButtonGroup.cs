@@ -9,8 +9,8 @@ namespace XGT.PCInput
 {
     public class PCButtonGroup
     {
-        List<PCButton> mButtons;
-        Rectangle buttonArea;
+        private List<PCButton> mButtons;
+        private Rectangle buttonArea;
 
         /// <summary>
         /// Create a new button group with the specified buttons
@@ -22,7 +22,7 @@ namespace XGT.PCInput
             buttonArea = new Rectangle();
             foreach (PCButton button in lButtons)
             {
-                addButton(button);
+                AddButton(button);
             }
         }
 
@@ -35,7 +35,7 @@ namespace XGT.PCInput
             mButtons = new List<PCButton>();
             for (int buttonId = 0; buttonId < lButtons.Length; buttonId++)
             {
-                addButton(lButtons[buttonId]);
+                AddButton(lButtons[buttonId]);
             }
         }
 
@@ -43,7 +43,7 @@ namespace XGT.PCInput
         /// Add a button to an existing button group
         /// </summary>
         /// <param name="lButton">New button - should be in close proximity of other buttons for greatest efficency</param>
-        public void addButton(PCButton lButton)
+        public void AddButton(PCButton lButton)
         {
             Rectangle buttonPosition = lButton.Location;
             if (!buttonArea.Contains(buttonPosition))
@@ -85,7 +85,7 @@ namespace XGT.PCInput
         /// </summary>
         /// <param name="lMousePoint">The position of the mouse</param>
         /// <returns></returns>
-        public PCButton checkForCollision(Point lMousePoint)
+        public PCButton CheckForCollision(Point lMousePoint)
         {
             PCButton hitButton = null;
 
@@ -93,7 +93,7 @@ namespace XGT.PCInput
             {
                 foreach (PCButton button in mButtons)
                 {
-                    if (button.checkForCollision(lMousePoint))
+                    if (button.CheckForCollision(lMousePoint))
                     {
                         hitButton = button;
                         break;
