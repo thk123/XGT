@@ -29,5 +29,6 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 #Don't sync private key
 *ppk
+Test Save Folder/testsave.xml
 *.dll
 *.zip

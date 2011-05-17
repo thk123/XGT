@@ -10,6 +10,28 @@ Namespace summary:
 -Input -- Manange keyboard (and mouse) interaction specifically allowing users to hook up key press events to actual events
 -Collision -- Provide a collision manager for 2D objects
 -GameSreen -- Provide a set of classes to manage games with multiple (potentially nested) screens
+
+	-Animation
+		-Demonstration of use
+
+	-SpriteFontMaker
+		-Tidy up design
+
+	-XmlFileDesinger
+		-Be able to create new schemas 
+		-Add data to the schemas
+		-Generate the code to import the xml files
+
+	-Input
+		-ButtonManager stuff
+		-Events for listening to specific keys
+
+	-Collision
+		-Collision Manager
+		-Collision object
+
+	-Gamescreen	
+		-Screen Manager
 -LevelDesigner -- A robust xml level editor. Allows you to position textures, define properties for them and export as an xml
 
 Features:
@@ -33,3 +55,6 @@ Todo:
           -General UI improvements
 -XmlFileDesigner
           -Yet to implement
+
+		-Screen
+		-Nested screen

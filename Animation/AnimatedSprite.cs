@@ -11,26 +11,19 @@ namespace XGT.Animation
     {
         private const int millisecondsInASecond = 1000;
 
-        private Texture2D mBaseTexture;
+        protected Texture2D mBaseTexture;
         private int mMillisecondsPerFrame;
         private int mMillisecondsElapsed;
         private int mTotalFrames;
         private int mCurrentFrame;
         private int mTotalAnimationStances;
         private int mCurrentAnimationStance;
-        private bool mVisible;
+        protected bool mVisible;
         private Rectangle mFrameSize;
-        private Rectangle mCurrentFrameRect;
-        private Vector2 mGlobalPosition;
-        private float mRotation;
-        private Color mColor;
+        protected Rectangle mCurrentFrameRect;
 
         public int FrameRate
         {
-            get
-            {
-                return mMillisecondsPerFrame / millisecondsInASecond;
-            }
             set
             {
                 if (value < 60)
@@ -55,7 +48,12 @@ namespace XGT.Animation
             {
                 if (value < mTotalAnimationStances)
                 {
-                    AnimationStanceChanged(this, new AnimationStanceChangedEventArgs(mCurrentAnimationStance, value));
+                    EventHandler<AnimationStanceChangedEventArgs> handler;
+                    handler = mAnimationStanceChanged;
+                    if (handler != null && value != mCurrentAnimationStance) //only throw the event if a new animation stance is set
+                    {
+                        handler(this, new AnimationStanceChangedEventArgs(mCurrentAnimationStance, value));
+                    }
                     mCurrentAnimationStance = value;
                     mCurrentFrameRect.Y = mCurrentAnimationStance * mFrameSize.Height;
                 }
@@ -66,7 +64,19 @@ namespace XGT.Animation
             }
 
         }
-        public event EventHandler<AnimationStanceChangedEventArgs> AnimationStanceChanged;
+        public event EventHandler<AnimationStanceChangedEventArgs> AnimationStanceChanged
+        {
+            add
+            {
+                mAnimationStanceChanged += value;
+            }
+            remove
+            {
+                mAnimationStanceChanged -= value;
+            }
+        }
+        private EventHandler<AnimationStanceChangedEventArgs> mAnimationStanceChanged;
+
 
         public bool Visible
         {
@@ -76,50 +86,20 @@ namespace XGT.Animation
             }
             set
             {
+                EventHandler<EventArgs> handler;
+                handler = mVisibleChanged;
+                if (handler != null && value != mVisible)
+                {
+                    handler(this, new EventArgs());
+                }
                 mVisible = value;
-                VisibleChanged(this, new EventArgs());
             }
         }
         public event EventHandler<EventArgs> VisibleChanged;
-
-        public Vector2 GlobalPosition
-        {
-            get
-            {
-                return mGlobalPosition;
-            }
-            set
-            {
-                mGlobalPosition = value;
-                //check if outside bounds?
-            }
-        }
-        public float Rotation
-        {
-            get
-            {
-                return mRotation;
-            }
-            set
-            {
-                mRotation = value;
-            }
-        }
-        public Color Color
-        {
-            get
-            {
-                return mColor;
-            }
-            set
-            {
-                mColor = value;
-            }
-        }
+        private EventHandler<EventArgs> mVisibleChanged;
 
         public AnimatedSprite(Texture2D lSpriteTexture, int lFrameRate, Rectangle lFrameSize)
         {
-            mColor = Color.White;
             mBaseTexture = lSpriteTexture;
             FrameRate = lFrameRate;
             mFrameSize = lFrameSize;
@@ -131,16 +111,10 @@ namespace XGT.Animation
             mVisible = true;
         }
 
-        public void Translate(Vector2 translationVector)
-        {
-            mGlobalPosition += translationVector;
-        }
-
-        public void Rotate(float lRotation)
-        {
-            mRotation += lRotation;
-        }
-
+        /// <summary>
+        /// Updates the selected frame with in your sprite
+        /// </summary>
+        /// <param name="gameTime">The GameTime to ensure that frame rate is consistent</param>
         public void Update(GameTime gameTime)
         {
             mMillisecondsElapsed += gameTime.ElapsedGameTime.Milliseconds;
@@ -158,11 +132,90 @@ namespace XGT.Animation
             }
             mCurrentFrameRect.X = mCurrentFrame * mFrameSize.Width; 
         }
+        
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        /// <summary>
+        /// Draws the sprite at the specifed rectangle -- use if you are managing position, rotation etc of your class
+        /// </summary>
+        /// <param name="spriteBatch">The (initalised) sprite batch to draw the texture with</param>
+        /// <param name="lDrawRectangle">The rectangle with the absolute position of where to draw the sprite</param>
+        /// <param name="lColor">The color to draw the sprite with, use Color.White for normal</param>
+        public void Draw(SpriteBatch spriteBatch, Rectangle lDrawRectangle, Color lColor)
         {
-            //Assuming sprite batch has begun
-            spriteBatch.Draw(mBaseTexture, mGlobalPosition, mCurrentFrameRect, mColor, mRotation, Vector2.Zero,1f, SpriteEffects.None, 0);
+            if (mVisible)
+            {
+                spriteBatch.Draw(mBaseTexture, lDrawRectangle, mCurrentFrameRect, lColor);
+            }
+        }
+
+        /// <summary>
+        /// Draw the sprite with the specified properties -- use if you are managing position, rotation etc of your class
+        /// </summary>
+        /// <param name="spriteBatch">The (initalised) sprite batch to draw the texture with</param>
+        /// <param name="lDrawRectangle">The rectangle with the absolute position of where to draw the sprite</param>
+        /// <param name="lColor">The color to draw the sprite with, use Color.White for normal</param>
+        /// <param name="lRotation">The rotation around the specifed origin in radians</param>
+        /// <param name="lOrigin">The relative to the origin of the sprite point to rotate around</param>
+        /// <param name="lSpriteEffects">The spriteEffects to draw this sprite with</param>
+        /// <param name="lLayerDepth">The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer. Use SpriteSortMode if you want sprites to be sorted during drawing.</param>
+        public void Draw(SpriteBatch spriteBatch, Rectangle lDrawRectangle, Color lColor, float lRotation, Vector2 lOrigin, SpriteEffects lSpriteEffects, float lLayerDepth)
+        {
+            if (mVisible)
+            {
+                spriteBatch.Draw(mBaseTexture, lDrawRectangle, mCurrentFrameRect, lColor, lRotation, lOrigin, lSpriteEffects, lLayerDepth);
+            }
+        }
+
+        /// <summary>
+        /// Draw the sprite with the specified properties -- use if you are managing position, rotation etc of your class
+        /// </summary>
+        /// <param name="spriteBatch">The (initalised) sprite batch to draw the texture with</param>
+        /// <param name="lDrawPoint">The absolute vector to draw the sprite</param>
+        /// <param name="lColor">The color to draw the sprite with, use Color.White for normal</param>
+        public void Draw(SpriteBatch spriteBatch, Vector2 lDrawPoint, Color lColor)
+        {
+            if (mVisible)
+            {
+                spriteBatch.Draw(mBaseTexture, lDrawPoint, mCurrentFrameRect, lColor);
+            }
+        }
+
+        /// <summary>
+        /// Draw the sprite with the specified properties -- use if you are managing position, rotation etc of your class
+        /// </summary>
+        /// <param name="spriteBatch">The (initalised) sprite batch to draw the texture with</param>
+        /// <param name="lDrawPoint">The absolute vector to draw the sprite</param>
+        /// <param name="lColor">The color to draw the sprite with, use Color.White for normal</param>
+        /// <param name="lRotation">The rotation around the specifed origin in radians</param>
+        /// <param name="lOrigin">The relative to the origin of the sprite point to rotate around</param>
+        /// <param name="lScale">The scale factor to apply to this sprite</param>
+        /// <param name="lSpriteEffects">The spriteEffects to draw this sprite with</param>
+        /// <param name="lLayerDepth">The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer. Use SpriteSortMode if you want sprites to be sorted during drawing.</param>
+        public void Draw(SpriteBatch spriteBatch, Vector2 lDrawPoint, Color lColor, float lRotation, Vector2 lOrigin, float lScale, SpriteEffects lSpriteEffects, float lLayerDepth)
+        {
+            if (mVisible)
+            {
+                spriteBatch.Draw(mBaseTexture, lDrawPoint, mCurrentFrameRect, lColor, lRotation, lOrigin, lScale, lSpriteEffects, lLayerDepth);
+            }
+        }
+        
+        /// <summary>
+        /// Draw the sprite with the specified properties -- use if you are managing position, rotation etc of your class
+        /// </summary>
+        /// <param name="spriteBatch">The (initalised) sprite batch to draw the texture with</param>
+        /// <param name="lDrawPoint">The absolute vector to draw the sprite</param>
+        /// <param name="lColor">The color to draw the sprite with, use Color.White for normal</param>
+        /// <param name="lRotation">The rotation around the specifed origin in radians</param>
+        /// <param name="lOrigin">The relative to the origin of the sprite point to rotate around</param>
+        /// <param name="lScaleVector">The vector scale factor to apply to this sprite</param>
+        /// <param name="lSpriteEffects">The spriteEffects to draw this sprite with</param>
+        /// <param name="lLayerDepth">The depth of a layer. By default, 0 represents the front layer and 1 represents a back layer. Use SpriteSortMode if you want sprites to be sorted during drawing.</param>
+        public void Draw(SpriteBatch spriteBatch, Vector2 lDrawPoint, Color lColor, float lRotation, Vector2 lOrigin, Vector2 lScaleVector, SpriteEffects lSpriteEffects, float lLayerDepth)
+        {
+            if (mVisible)
+            {
+                spriteBatch.Draw(mBaseTexture, lDrawPoint, mCurrentFrameRect, lColor, lRotation, lOrigin, lScaleVector, lSpriteEffects, lLayerDepth);
+            }
         }
     }
 }

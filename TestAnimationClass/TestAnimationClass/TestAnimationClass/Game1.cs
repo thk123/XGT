@@ -21,7 +21,7 @@ namespace TestAnimationClass
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D baseTexture;
-        AnimatedSprite mySprite;
+       
         ButtonManager mainWindowButtonManager;
 
         public Game1()
@@ -81,8 +81,6 @@ namespace TestAnimationClass
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             baseTexture = Content.Load<Texture2D>("BaseTexture");
-            mySprite = new AnimatedSprite(baseTexture, 4, new Rectangle(0, 0, 100, 100));
-            mySprite.GlobalPosition = new Vector2(50f, 50f);
             PCButton myBtn = new PCButton(baseTexture, new Rectangle(10, 10, 100, 100));
             myBtn.MouseHover += new EventHandler(myBtn_MouseHover);
             myBtn.RightMousePress += new EventHandler(myBtn_RightMousePress);
@@ -137,8 +135,10 @@ namespace TestAnimationClass
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+           
+
             // TODO: Add your update logic here
-            mySprite.Update(gameTime);
+           
 
             base.Update(gameTime);
         }
@@ -151,7 +151,7 @@ namespace TestAnimationClass
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            mySprite.Draw(gameTime, spriteBatch);
+            
             mainWindowButtonManager.Draw(spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
