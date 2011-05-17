@@ -20,7 +20,7 @@ namespace TestAnimationClass
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Texture2D baseTexture;
-        AnimatedSprite mySprite;
+       
 
         public Game1()
         {
@@ -50,10 +50,12 @@ namespace TestAnimationClass
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             baseTexture = Content.Load<Texture2D>("BaseTexture");
-            mySprite = new AnimatedSprite(baseTexture, 4, new Rectangle(0, 0, 100, 100));
-            mySprite.GlobalPosition = new Vector2(50f, 50f);
-
             // TODO: use this.Content to load your game content here
+        }
+
+        void mySprite_AnimationStanceChanged(object sender, AnimationStanceChangedEventArgs e)
+        {
+            Console.WriteLine("Hi");
         }
 
         /// <summary>
@@ -76,8 +78,10 @@ namespace TestAnimationClass
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+           
+
             // TODO: Add your update logic here
-            mySprite.Update(gameTime);
+           
 
             base.Update(gameTime);
         }
@@ -90,7 +94,7 @@ namespace TestAnimationClass
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            mySprite.Draw(gameTime, spriteBatch);
+            
             spriteBatch.End();
             // TODO: Add your drawing code here
 

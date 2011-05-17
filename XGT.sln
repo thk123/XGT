@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animation", "Animation\Animation.csproj", "{EAEBB5DD-5DEE-4675-8E60-26633C16BD3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlFileDesigner", "XmlFileDesigner\XmlFileDesigner.csproj", "{12A5DB0E-B843-4E5C-9257-11B40EE69B95}"
@@ -12,6 +12,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpriteFontMaker", "SpriteFontMaker\SpriteFontMaker\SpriteFontMaker.csproj", "{95E46709-748B-4CD9-8E2C-CBC988ADF31C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCInput", "PCInput\PCInput.csproj", "{A937B41C-551E-446B-A89B-3892755808ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3E2CFB8E-22FF-41D5-92CB-A702D67EACC6}"
+	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
