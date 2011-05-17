@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using XGT.Animation;
+using XGT.PCInput;
 
 namespace TestAnimationClass
 {
@@ -21,11 +22,13 @@ namespace TestAnimationClass
         SpriteBatch spriteBatch;
         Texture2D baseTexture;
        
+        ButtonManager mainWindowButtonManager;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.IsMouseVisible = true;
         }
 
         /// <summary>
@@ -37,8 +40,36 @@ namespace TestAnimationClass
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            KeyboardManager.Init();
+            MouseManager.Init();
+            mainWindowButtonManager = new ButtonManager();
 
+            KeyboardManager.EscapeKeyPressed += new EventHandler(KeyboardManager_EscapeKeyPressed);
+            KeyboardManager.AKeyPressed += new EventHandler(KeyboardManager_AKeyPressed);
+
+            MouseManager.LeftMouseDoubleClick += new EventHandler(MouseManager_LeftMouseDoubleClick);
+            MouseManager.ScrollWheelScrolled += new EventHandler(MouseManager_ScrollWheelScrolled);
             base.Initialize();
+        }
+
+        void MouseManager_ScrollWheelScrolled(object sender, EventArgs e)
+        {
+            Console.WriteLine("Scroll whell scrolled");
+        }
+
+        void MouseManager_LeftMouseDoubleClick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Double clicked");
+        }
+
+        void KeyboardManager_AKeyPressed(object sender, EventArgs e)
+        {
+            Console.WriteLine("Hello");
+        }
+
+        void KeyboardManager_EscapeKeyPressed(object sender, EventArgs e)
+        {
+            this.Exit();
         }
 
         /// <summary>
@@ -50,12 +81,36 @@ namespace TestAnimationClass
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             baseTexture = Content.Load<Texture2D>("BaseTexture");
+            PCButton myBtn = new PCButton(baseTexture, new Rectangle(10, 10, 100, 100));
+            myBtn.MouseHover += new EventHandler(myBtn_MouseHover);
+            myBtn.RightMousePress += new EventHandler(myBtn_RightMousePress);
+            myBtn.HotKey = Keys.G;
+            myBtn.LeftMousePress += new EventHandler(myBtn_LeftMousePress);
+            myBtn.LeftMouseDoubleClick += new EventHandler(myBtn_LeftMouseDoubleClick);
+            myBtn.ConfigureButton(PCButtonState.hover, new Point(100, 0));
+            mainWindowButtonManager.AddButton(myBtn);
+
             // TODO: use this.Content to load your game content here
         }
 
-        void mySprite_AnimationStanceChanged(object sender, AnimationStanceChangedEventArgs e)
+        void myBtn_LeftMousePress(object sender, EventArgs e)
         {
-            Console.WriteLine("Hi");
+            Console.WriteLine("clciked");
+        }
+
+        void myBtn_LeftMouseDoubleClick(object sender, EventArgs e)
+        {
+            Console.WriteLine("Left mouse double clicked");
+        }
+
+        void myBtn_RightMousePress(object sender, EventArgs e)
+        {
+            Console.WriteLine("Right clicked button");
+        }
+
+        void myBtn_MouseHover(object sender, EventArgs e)
+        {
+            Console.WriteLine("Mouse hover");
         }
 
         /// <summary>
@@ -74,6 +129,8 @@ namespace TestAnimationClass
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardManager.Update(gameTime);
+            MouseManager.Update(gameTime);
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -95,6 +152,7 @@ namespace TestAnimationClass
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             
+            mainWindowButtonManager.Draw(spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
 

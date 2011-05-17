@@ -123,9 +123,14 @@
       <Project>{EAEBB5DD-5DEE-4675-8E60-26633C16BD3D}</Project>
       <Name>Animation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\PCInput\PCInput.csproj">
+      <Project>{A937B41C-551E-446B-A89B-3892755808ED}</Project>
+      <Name>PCInput</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestAnimationClassContent\TestAnimationClassContent.contentproj">
-      <Name>TestAnimationClassContent</Name>
+      <Name>TestAnimationClassContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{C08B771A-1750-4B27-87FE-EB40BD6572DD}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
