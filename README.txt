@@ -23,8 +23,8 @@ Namespace summary:
 		-Generate the code to import the xml files
 
 	-Input
-		-ButtonManager stuff
 		-Events for listening to specific keys
+		-KeyboardManager needs events for keys down as well as key pressed (ie events that keep firing)
 
 	-Collision
 		-Collision Manager
@@ -55,6 +55,5 @@ Todo:
           -General UI improvements
 -XmlFileDesigner
           -Yet to implement
-
 		-Screen
 		-Nested screen
