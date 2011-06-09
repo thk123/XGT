@@ -45,38 +45,7 @@ namespace XGT.PCInput
         /// <param name="lButton">New button - should be in close proximity of other buttons for greatest efficency</param>
         public void AddButton(PCButton lButton)
         {
-            Rectangle buttonPosition = lButton.Location;
-            if (!buttonArea.Contains(buttonPosition))
-            {
-                {
-                    int xDist = buttonPosition.X - buttonArea.X;
-                    if (xDist < 0)
-                    {
-                        buttonArea.X = buttonPosition.X;
-                        buttonArea.Width -= xDist;
-                    }
-
-                    xDist = buttonPosition.Right - buttonArea.Right;
-                    if (xDist > 0)
-                    {
-                        buttonArea.Width += xDist;
-                    }
-                }
-                {
-                    int yDist = buttonPosition.Y - buttonArea.Y;
-                    if (yDist < 0)
-                    {
-                        buttonArea.Y = buttonPosition.Y;
-                        buttonArea.Height -= yDist;
-                    }
-
-                    yDist = buttonPosition.Bottom - buttonArea.Bottom;
-                    if (yDist > 0)
-                    {
-                        buttonArea.Height += yDist;
-                    }
-                }
-            }
+            lButton.AddToButtonGroup(ref buttonArea);
             mButtons.Add(lButton);
         }
 

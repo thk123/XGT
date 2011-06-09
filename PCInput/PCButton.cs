@@ -16,18 +16,8 @@ namespace XGT.PCInput
         private Rectangle mLocation;
         private Point[] mStartPoints;
         private PCButtonState mButtonState;
-        private Keys mHotKey;
-
-        /// <summary>
-        /// The location where this button will be drawn
-        /// </summary>
-        public Rectangle Location
-        {
-            get
-            {
-                return mLocation;
-            }
-        }
+        private EventInfo hotkeyEvent;
+        private EventHandler hotkeyEventHandler;
 
         /// <summary>
         /// The current state of the button
@@ -42,21 +32,17 @@ namespace XGT.PCInput
 
         public Keys HotKey
         {
-            get
-            {
-                return mHotKey;
-            }
             set
             {
+                if (hotkeyEvent != null)
+                {
+                    hotkeyEvent.RemoveEventHandler(null, hotkeyEventHandler);
+                }
                 Type keyboardManager = typeof(KeyboardManager);
-                EventInfo hotkeyEvent = keyboardManager.GetEvent(value.ToString() + "KeyPressed");
+                hotkeyEvent = keyboardManager.GetEvent(value.ToString() + "KeyPressed");
                 MethodInfo hotKeyMethod = this.GetType().GetMethod("LeftMousePressed");
-                HotKeyHandler myDelegate = new HotKeyHandler(HotKeyMethod);
-                hotkeyEvent.AddEventHandler(null, myDelegate);
-                //Delegate hotkeyHandler = Delegate.CreateDelegate(hotKeyMethod.GetType(), hotKeyMethod);
-                  //hotkeyEvent.AddEventHandler(null, HotKeyPressed);
-
-
+                hotkeyEventHandler = new EventHandler(HotKeyMethod);
+                hotkeyEvent.AddEventHandler(null, hotkeyEventHandler);
             }
         }
 
@@ -79,9 +65,53 @@ namespace XGT.PCInput
             mButtonState = PCButtonState.none;
         }
 
+        /// <summary>
+        /// Set the positions of different button states
+        /// </summary>
+        /// <param name="lButtonState">The button state to define</param>
+        /// <param name="position">The position of the button image in the sprite</param>
         public void ConfigureButton(PCButtonState lButtonState, Point position)
         {
             mStartPoints[(int)lButtonState] = position;
+        }
+
+        /// <summary>
+        /// Checks to see if a button group's rectangle is big enough to contain the button and if not expands it
+        /// </summary>
+        /// <param name="lButtonGroupArea">The current rectangle of the button group</param>
+        public void AddToButtonGroup(ref Rectangle lButtonGroupArea)
+        {
+            if (!lButtonGroupArea.Contains(mLocation))
+            {
+                {
+                    int xDist = mLocation.X - lButtonGroupArea.X;
+                    if (xDist < 0)
+                    {
+                        lButtonGroupArea.X = mLocation.X;
+                        lButtonGroupArea.Width -= xDist;
+                    }
+
+                    xDist = mLocation.Right - lButtonGroupArea.Right;
+                    if (xDist > 0)
+                    {
+                        lButtonGroupArea.Width += xDist;
+                    }
+                }
+                {
+                    int yDist = mLocation.Y - lButtonGroupArea.Y;
+                    if (yDist < 0)
+                    {
+                        lButtonGroupArea.Y = mLocation.Y;
+                        lButtonGroupArea.Height -= yDist;
+                    }
+
+                    yDist = mLocation.Bottom - lButtonGroupArea.Bottom;
+                    if (yDist > 0)
+                    {
+                        lButtonGroupArea.Height += yDist;
+                    }
+                }
+            }
         }
 
         public virtual bool CheckForCollision(Point position)

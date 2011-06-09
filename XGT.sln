@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.txt = README.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collision2D", "Collision2D\Collision2D.csproj", "{534B6D0D-A58A-4F9D-86DB-10890365FE65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,16 @@ Global
 		{A937B41C-551E-446B-A89B-3892755808ED}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A937B41C-551E-446B-A89B-3892755808ED}.Release|x86.ActiveCfg = Release|x86
 		{A937B41C-551E-446B-A89B-3892755808ED}.Release|x86.Build.0 = Release|x86
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{534B6D0D-A58A-4F9D-86DB-10890365FE65}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

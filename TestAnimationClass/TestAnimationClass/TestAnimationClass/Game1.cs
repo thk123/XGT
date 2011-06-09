@@ -20,9 +20,13 @@ namespace TestAnimationClass
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
         Texture2D baseTexture;
+        Texture2D buttonTexture;
        
-        ButtonManager mainWindowButtonManager;
+        ButtonManager mainWindowButtonManager; //Buttons managers can be instantiated for different screens
+
+        Character player;
 
         public Game1()
         {
@@ -39,18 +43,100 @@ namespace TestAnimationClass
         /// </summary>
         protected override void Initialize()
         {
+            
+            
             // TODO: Add your initialization logic here
-            KeyboardManager.Init();
+            KeyboardManager.Init(); //Initalise the Keyboard and Mouse managers before regestring for events
             MouseManager.Init();
             mainWindowButtonManager = new ButtonManager();
 
-            KeyboardManager.EscapeKeyPressed += new EventHandler(KeyboardManager_EscapeKeyPressed);
+            //You can register to individual key presses like this
+            KeyboardManager.EscapeKeyPressed += new EventHandler(KeyboardManager_EscapeKeyPressed); 
             KeyboardManager.AKeyPressed += new EventHandler(KeyboardManager_AKeyPressed);
 
+            //You can register to specific mouse events like this
             MouseManager.LeftMouseDoubleClick += new EventHandler(MouseManager_LeftMouseDoubleClick);
             MouseManager.ScrollWheelScrolled += new EventHandler(MouseManager_ScrollWheelScrolled);
+
             base.Initialize();
         }
+
+        
+
+        /// <summary>
+        /// LoadContent will be called once per game and is the place to load
+        /// all of your content.
+        /// </summary>
+        protected override void LoadContent()
+        {
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            baseTexture = Content.Load<Texture2D>("BaseTexture");
+            buttonTexture = Content.Load<Texture2D>("ButtonTexture");
+
+            PCButton myBtn = new PCButton(buttonTexture, new Rectangle(10, 10, 100, 100)); //create the button with position and size of the button
+            myBtn.ConfigureButton(PCButtonState.hover, new Point(100, 0)); //Configure specific button states - eg setting the hover image to be at 100,0 in the texture
+            myBtn.ConfigureButton(PCButtonState.pressed, new Point(200,0));
+            myBtn.ConfigureButton(PCButtonState.released, new Point(300, 0));
+
+            //Register to specific button events
+            myBtn.MouseHover += new EventHandler(myBtn_MouseHover);
+            myBtn.RightMousePress += new EventHandler(myBtn_RightMousePress);
+            myBtn.LeftMousePress += new EventHandler(myBtn_LeftMousePress);
+            myBtn.LeftMouseDoubleClick += new EventHandler(myBtn_LeftMouseDoubleClick);
+            
+            myBtn.HotKey = Keys.G; //setting the hotkey means that the button listens for this key and fires mouse click
+                  
+            mainWindowButtonManager.AddButton(myBtn);
+
+            player = new Character(baseTexture);
+        }
+
+        
+
+        /// <summary>
+        /// UnloadContent will be called once per game and is the place to unload
+        /// all content.
+        /// </summary>
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
+
+        /// <summary>
+        /// Allows the game to run logic such as updating the world,
+        /// checking for collisions, gathering input, and playing audio.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Update(GameTime gameTime)
+        {
+            KeyboardManager.Update(gameTime);
+            MouseManager.Update(gameTime);
+
+            player.Update(gameTime);
+
+            base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
+
+            player.Draw(spriteBatch);
+
+            mainWindowButtonManager.Draw(spriteBatch);
+            
+            spriteBatch.End();
+           
+            base.Draw(gameTime);
+        }
+
 
         void MouseManager_ScrollWheelScrolled(object sender, EventArgs e)
         {
@@ -72,30 +158,9 @@ namespace TestAnimationClass
             this.Exit();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            baseTexture = Content.Load<Texture2D>("BaseTexture");
-            PCButton myBtn = new PCButton(baseTexture, new Rectangle(10, 10, 100, 100));
-            myBtn.MouseHover += new EventHandler(myBtn_MouseHover);
-            myBtn.RightMousePress += new EventHandler(myBtn_RightMousePress);
-            myBtn.HotKey = Keys.G;
-            myBtn.LeftMousePress += new EventHandler(myBtn_LeftMousePress);
-            myBtn.LeftMouseDoubleClick += new EventHandler(myBtn_LeftMouseDoubleClick);
-            myBtn.ConfigureButton(PCButtonState.hover, new Point(100, 0));
-            mainWindowButtonManager.AddButton(myBtn);
-
-            // TODO: use this.Content to load your game content here
-        }
-
         void myBtn_LeftMousePress(object sender, EventArgs e)
         {
-            Console.WriteLine("clciked");
+            Console.WriteLine("Button Clicked");
         }
 
         void myBtn_LeftMouseDoubleClick(object sender, EventArgs e)
@@ -111,52 +176,6 @@ namespace TestAnimationClass
         void myBtn_MouseHover(object sender, EventArgs e)
         {
             Console.WriteLine("Mouse hover");
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            KeyboardManager.Update(gameTime);
-            MouseManager.Update(gameTime);
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-           
-
-            // TODO: Add your update logic here
-           
-
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
-            
-            mainWindowButtonManager.Draw(spriteBatch);
-            spriteBatch.End();
-            // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
         }
     }
 }

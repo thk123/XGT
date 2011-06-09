@@ -83,7 +83,7 @@ namespace XGT.PCInput
         /// Add a set of buttons to the manager in a new button group
         /// </summary>
         /// <param name="buttons">The buttons to add (in close proximity)</param>
-        /// <returns></returns>The index of the group in this manager</returns>
+        /// <returns>The index of the group in this manager</returns>
         public int AddButtonGroup(params PCButton[] buttons)
         {
             PCButtonGroup buttonGroup = new PCButtonGroup(buttons);

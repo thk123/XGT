@@ -88,23 +88,15 @@ namespace SpriteFontMaker
 
         private void AddFont(string fontFamily, int lFontSize, bool lBold, bool lItalic)
         {
-            //if (verticalPosition < maxFonts)
-           // {
                 SpriteFont newFont = new SpriteFont(fontFamily, lFontSize, lBold, lItalic, verticalPosition, this);
                 fontBoxes.Add(newFont);
                 verticalPosition++;
                 button2.Location = new Point(button2.Location.X, button2.Location.Y + 50);
                 button2.Invalidate();
-            /*}
-            else
-            {
-                MessageBox.Show("Maximum 7 fonts");
-            }*/
         }
 
         private void createCSharpCode()
         {
-            //this.Controls.Remove(codeOutput);
             List<String> lines = new List<string>();
             lines.Add("#region Fonts");
             foreach(SpriteFont font in fontBoxes)
@@ -121,38 +113,7 @@ namespace SpriteFontMaker
                 lines.Add(String.Format("{0} = Content.Load<SpriteFont>(\"Fonts\\\\{0}\");", font.mFontName));
             }
             lines.Add("#endregion");
-            codeOutput = new TextBox();
-            codeOutput.Multiline = true;
-            codeOutput.ScrollBars = ScrollBars.Both;
-            foreach (string line in lines)
-            {
-                codeOutput.Text += line;
-                codeOutput.Text += Environment.NewLine;
-            }
-            //codeOutput.Width = 400;
-            //codeOutput.Height = 200;
-            //codeOutput.Location = new Point(85, 150 + 50 * verticalPosition);
-            //codeOutput.Click += new EventHandler(codeOutput_Click);
-            //this.Controls.Add(codeOutput);
-            /*lines = new List<string>();
-            /*for (int i = (int)Keys.A; i <= (int)Keys.Zoom; i++)
-            {
-                string line = "public static event EventHandler " + ((Keys)i).ToString() + "KeyPressed = delegate { };";
-                lines.Add(line);
-            }
-            for (int i = (int)Keys.A; i <= (int)Keys.Zoom; i++)
-            {
-                /*
-                 *case "A":
-                    AKeyPressed(null, new KeyPressedEventArgs(keyPressed));
-                    break; 
-                 
-                lines.Add("case \""+((Keys)i).ToString()+"\":");
-                lines.Add(((Keys)i).ToString() + "KeyPressed(null, new KeyPressedEventArgs(keyPressed));");
-                lines.Add("break;");
-                lines.Add("");
-            }
-            */
+            
             CodeDialog showCode = new CodeDialog();
             showCode.loadCode(lines);
             showCode.Show();
